@@ -2,7 +2,7 @@
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             cordova.plugins.notification.local.on("click", function (notification) {
                 navigator.notification.confirm(
-                    'Hello ' + notification.data['username'] + ', Category selected ' + notification.id, // message
+                    'Hello ' + notification.data.username + ', Category selected ' + notification.id, // message
                     onConfirm, // callback to invoke with index of button pressed
                     'Saving data', // title
                     ['Ok', 'Cancel'] // buttonLabels
