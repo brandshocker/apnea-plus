@@ -9,17 +9,16 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
 
     <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="mo.component.css" />
     <title>Apnea+</title>
 </head>
 
-<body>
-    <h1>Test Alert</h1>
-    <a href="#" onclick="testNotif()">New Test</a>
-    
-    <script type="text/javascript">
+<body onload="init();">
+    <div id="main-container">
+        <div id="main-header"></div>
+        <div id="main-subheader"></div>
+    </div><!-- main-container -->
 
-
-    </script>
     <script src="js/minimo.core.js"></script>
     <script src="js/minimo.apneaplus.js"></script>
     <script src="cordova.js"></script>

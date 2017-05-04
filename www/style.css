@@ -2,4 +2,38 @@ body
 {
     width: 100%;
     height: 100%;
+    padding: 0px;
+    margin: 0px;
+    background: #D49300;
+}
+
+#main-container
+{
+    width: 100%;
+    height: 100%;
+}
+
+#main-header
+{
+    width: 100%;
+    height: 0px;
+    background: #b27c00;
+    background-image: url('res/header.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 30%;
+    transition: 1s;
+}
+
+#main-subheader
+{
+    width: 100%;
+    height: 0px;
+    background: #c18600;
+    transition: 1.2s;
+}
+
+#blue-container
+{
+    background: #51C5B8;
 }
