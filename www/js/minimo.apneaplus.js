@@ -28,10 +28,9 @@ testNotif = function () {
     })
 };
 
-init = function()
-{
+init = function () {
     log('Initialized');
-    
+
     o('main-header').style.height = '70px';
     o('main-subheader').style.height = '50px';
 }
@@ -40,7 +39,9 @@ init = function()
 document.addEventListener('deviceready', function () {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    StatusBar.backgroundColorByHexString('#b27c00');
+    if (window.cordova && StatusBar) {
+        StatusBar.backgroundColorByHexString('#b27c00');
+    }
 
     cordova.plugins.notification.local.on("click", function (notification) {
 
@@ -53,6 +54,6 @@ document.addEventListener('deviceready', function () {
         );
     });
 
-    
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 });
