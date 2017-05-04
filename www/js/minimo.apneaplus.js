@@ -40,7 +40,7 @@ init = function()
 document.addEventListener('deviceready', function () {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    StatusBar.backgroundColorByHexString('#b27c00');
 
     cordova.plugins.notification.local.on("click", function (notification) {
 
