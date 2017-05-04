@@ -12,10 +12,10 @@
             function onConfirm(buttonIndex) {
                 switch(buttonIndex){
                     case 1:
-                        navigator.notification.alert('Confirmed',function(){},'Selection');
+                        alert('1');
                         break;
                     case 2:
-                        navigator.notification.alert('Canceled',function(){},'Selection');
+                        alert('2');
                         break;
                 }
             }
@@ -38,5 +38,6 @@
                     }
                 })
             };
+            
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         });
