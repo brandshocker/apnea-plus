@@ -2,13 +2,17 @@ modHeader = function (i) {
     switch (i) {
         case 'show':
             log('Navigation open');
+            StatusBar.backgroundColorByHexString('#362600');
             s('main-header').height = '100%';
             s('main-header').backgroundColor = '#362600';
+            s('main-header').backgroundSize = '70px';
             break;
         case 'hide':
             log('Navigation closed');
             s('main-header').height = '70px';
+            StatusBar.backgroundColorByHexString('#b27c00');
             s('main-header').backgroundColor = '#b27c00';
+            s('main-header').backgroundSize = '100px';
             break;
     }
 }
@@ -39,21 +43,21 @@ onConfirm = function (buttonIndex) {
     }
 }
 
-pageAbout = function () {
+pageStatic = function () {
     subHeader('show');
 }
 
-pageContent = function () {
+pageLog = function () {
     subHeader('hide');
 }
 
 pagePlaces = function () {
-    navigation('hide');
+    testNotif();
 }
 
 pageSelector = function () {
-    (location.hash === "#about") && pageAbout();
-    (location.hash === "#content") && pageContent();
+    (location.hash === "#static") && pageStatic();
+    (location.hash === "#log") && pageLog();
     (location.hash === "#places") && pagePlaces();
 }
 
@@ -71,12 +75,10 @@ subHeader = function (i) {
 swiper = function (state) {
     switch (state) {
         case 'left':
-            log('left');
             modNavigation('hide');
             break;
         case 'right':
             modNavigation('show');
-            log('right');
             break;
         case 'down':
             modHeader('show');
