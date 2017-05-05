@@ -61,6 +61,12 @@ pageLog = function () {
 
 pagePlaces = function () {
     testNotif();
+    var props = {
+        seconds: 10,
+        fps: 30
+    };
+
+    cordova.plugins.heartbeat.take(props, successCallback, errorCallback);
 }
 
 pageSelector = function () {
@@ -161,12 +167,7 @@ init = function () {
             alert("Has not posible measure your heart beat");
         }
 
-        var props = {
-            seconds: 10,
-            fps: 30
-        };
 
-        cordova.plugins.heartbeat.take(props, successCallback, errorCallback);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     });
 }
