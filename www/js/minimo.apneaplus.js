@@ -1,3 +1,33 @@
+modHeader = function (i) {
+    switch (i) {
+        case 'show':
+            log('Navigation open');
+            s('main-header').height = '100%';
+            s('main-header').backgroundColor = '#362600';
+            break;
+        case 'hide':
+            log('Navigation closed');
+            s('main-header').height = '70px';
+            s('main-header').backgroundColor = '#b27c00';
+            break;
+    }
+}
+
+modNavigation = function (i) {
+    switch (i) {
+        case 'show':
+            log('Navigation open');
+            s('navigation').width = '200px';
+            s('main-container').left = '200px';
+            break;
+        case 'hide':
+            log('Navigation closed');
+            s('navigation').width = '0px';
+            s('main-container').left = '0px';
+            break;
+    }
+}
+
 onConfirm = function (buttonIndex) {
     switch (buttonIndex) {
         case 1:
@@ -5,6 +35,54 @@ onConfirm = function (buttonIndex) {
             break;
         case 2:
             alert('2');
+            break;
+    }
+}
+
+pageAbout = function () {
+    subHeader('show');
+}
+
+pageContent = function () {
+    subHeader('hide');
+}
+
+pagePlaces = function () {
+    navigation('hide');
+}
+
+pageSelector = function () {
+    (location.hash === "#about") && pageAbout();
+    (location.hash === "#content") && pageContent();
+    (location.hash === "#places") && pagePlaces();
+}
+
+subHeader = function (i) {
+    switch (i) {
+        case 'show':
+            s('main-subheader').height = '50px';
+            break;
+        case 'hide':
+            s('main-subheader').height = '0px';
+            break;
+    }
+}
+
+swiper = function (state) {
+    switch (state) {
+        case 'left':
+            log('left');
+            modNavigation('hide');
+            break;
+        case 'right':
+            modNavigation('show');
+            log('right');
+            break;
+        case 'down':
+            modHeader('show');
+            break;
+        case 'up':
+            modHeader('hide');
             break;
     }
 }
@@ -31,8 +109,10 @@ testNotif = function () {
 init = function () {
     log('Initialized');
 
-    o('main-header').style.height = '70px';
-    o('main-subheader').style.height = '50px';
+    s('main-header').height = '70px';
+    s('main-subheader').height = '50px';
+
+    pageSelector();
 }
 
 
@@ -54,6 +134,14 @@ document.addEventListener('deviceready', function () {
         );
     });
 
+    // monitor hash
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 });
+
+// EVENT LISTENER
+window.addEventListener("hashchange", pageSelector);
+window.addEventListener("load", init);
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+document.addEventListener('touchend', handleTouchEnd, false);
