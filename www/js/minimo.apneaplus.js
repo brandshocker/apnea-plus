@@ -66,7 +66,7 @@ pagePlaces = function () {
         fps: 30
     };
 
-    cordova.plugins.heartbeat.take(props, successCallback, errorCallback);
+    heartbeat.take(props, successCallback, errorCallback);
 }
 
 pageSelector = function () {
