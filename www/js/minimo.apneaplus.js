@@ -2,17 +2,25 @@ modHeader = function (i) {
     switch (i) {
         case 'show':
             log('Navigation open');
-            StatusBar.backgroundColorByHexString('#362600');
+
             s('main-header').height = '100%';
             s('main-header').backgroundColor = '#362600';
             s('main-header').backgroundSize = '70px';
+
+            if (window.cordova && StatusBar) {
+                StatusBar.backgroundColorByHexString('#362600');
+            }
             break;
         case 'hide':
             log('Navigation closed');
             s('main-header').height = '70px';
-            StatusBar.backgroundColorByHexString('#b27c00');
+
             s('main-header').backgroundColor = '#b27c00';
             s('main-header').backgroundSize = '100px';
+
+            if (window.cordova && StatusBar) {
+                StatusBar.backgroundColorByHexString('#b27c00');
+            }
             break;
     }
 }
@@ -95,17 +103,22 @@ testNotif = function () {
 
     var sound = "file://notification.mp3";
 
-    cordova.plugins.notification.local.schedule({
-        id: 1,
-        title: 'Apnea+',
-        text: 'Dont forget to train today ...',
-        at: _5_sec_from_now,
-        sound: sound,
-        badge: 1,
-        data: {
-            "username": "Novan"
-        }
-    })
+    if (window.cordova) {
+        cordova.plugins.notification.local.schedule({
+            id: 1,
+            title: 'Apnea+',
+            text: 'Dont forget to train today ...',
+            at: _5_sec_from_now,
+            sound: sound,
+            badge: 1,
+            data: {
+                "username": "Novan"
+            }
+        })
+    } else {
+        log('Simulating notification ...')
+    }
+
 };
 
 init = function () {
@@ -115,31 +128,51 @@ init = function () {
     s('main-subheader').height = '50px';
 
     pageSelector();
+
+    var slider1 = new Slider('#slider1', '.z-slide-item', {
+        interval: 12,
+        duration: 0.3
+    });
+
+    document.addEventListener('deviceready', function () {
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (window.cordova && StatusBar) {
+            StatusBar.backgroundColorByHexString('#b27c00');
+        }
+
+        cordova.plugins.notification.local.on("click", function (notification) {
+
+            var user = JSON.parse(notification.data);
+            navigator.notification.confirm(
+                'Hello ' + user['username'] + ', Category selected ' + notification.id, // message
+                onConfirm, // callback to invoke with index of button pressed
+                'Saving data', // title
+                    ['Ok', 'Cancel'] // buttonLabels
+            );
+        });
+
+        // monitor hash
+        function successCallback(bpm) {
+            alert("Your heart beat per minute is:" + bpm);
+        }
+
+        function errorCallback() {
+            alert("Has not posible measure your heart beat");
+        }
+
+        var props = {
+            seconds: 10,
+            fps: 30
+        };
+
+        cordova.plugins.heartbeat.take(props, successCallback, errorCallback);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    });
 }
 
 
-document.addEventListener('deviceready', function () {
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    if (window.cordova && StatusBar) {
-        StatusBar.backgroundColorByHexString('#b27c00');
-    }
-
-    cordova.plugins.notification.local.on("click", function (notification) {
-
-        var user = JSON.parse(notification.data);
-        navigator.notification.confirm(
-            'Hello ' + user['username'] + ', Category selected ' + notification.id, // message
-            onConfirm, // callback to invoke with index of button pressed
-            'Saving data', // title
-                    ['Ok', 'Cancel'] // buttonLabels
-        );
-    });
-
-    // monitor hash
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-});
 
 // EVENT LISTENER
 window.addEventListener("hashchange", pageSelector);
