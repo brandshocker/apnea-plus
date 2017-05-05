@@ -17,7 +17,7 @@
     <plugin name="cordova-plugin-splashscreen" source="npm" spec="~3.2.1" />
     <plugin name="cordova-plugin-statusbar" source="npm" />
     <plugin name="de.appplant.cordova.plugin.local-notification-2" source="npm" />
-    <plugin name="heartbeat-cordova-plugin" />
+    <plugin spec="https://github.com/Litekey/heartbeat-cordova-plugin" />
     
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
