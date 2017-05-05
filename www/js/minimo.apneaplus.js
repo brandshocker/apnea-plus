@@ -67,12 +67,21 @@ pagePlaces = function () {
     };
 
     heartbeat.take(props, successCallback, errorCallback);
+    cordova.plugins.heartbeat.take(props, successCallback, errorCallback);
 }
 
 pageSelector = function () {
     (location.hash === "#static") && pageStatic();
     (location.hash === "#log") && pageLog();
     (location.hash === "#places") && pagePlaces();
+}
+
+function successCallback(bpm) {
+    alert("Your heart beat per minute is:" + bpm);
+}
+
+function errorCallback() {
+    alert("Has not posible measure your heart beat");
 }
 
 subHeader = function (i) {
@@ -159,13 +168,7 @@ init = function () {
         });
 
         // monitor hash
-        function successCallback(bpm) {
-            alert("Your heart beat per minute is:" + bpm);
-        }
 
-        function errorCallback() {
-            alert("Has not posible measure your heart beat");
-        }
 
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
