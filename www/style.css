@@ -28,7 +28,7 @@ a:active {
     display: flex;
     flex-direction: column;
     z-index: 50;
-    transition: 0.3s;
+    transition: 0.2s;
     left: 0px;
 }
 
@@ -39,7 +39,7 @@ a:active {
     background: #333;
     z-index: 80;
     opacity: 0; /*anim to 0.6*/
-    transition: 0.3s;
+    transition: 0.2s;
     visibility: hidden;
 }
 
@@ -96,7 +96,7 @@ a:active {
     height: calc(100% - 120px);
     overflow: hidden;
     display: flex;
-    transition: transform 0.3s;
+    transition: transform 0.2s;
     transform: translate3d(0%,0,0);
 }
 
@@ -127,6 +127,6 @@ a:active {
     display: block;
     position: fixed;
     z-index: 80;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
