@@ -131,7 +131,7 @@ Page = function (ID) {
     touchEnd = function (e) {
         if (this.state == 'hor') {
             if (this.initX > 30) {
-                s(page.ID).transition = '0.3s';
+                s(page.ID).transition = '0.2s';
                 if (this.diff >= -70 && this.diff <= 70) {
                     page.go(page.PAGE);
                 } else {
