@@ -1,3 +1,21 @@
+param_mainBlocker_opacity = '0.6';
+param_navigation_width = '200px';
+
+fadeIn = function (obj, opacity) {
+    if (opacity == undefined) {
+        opacity = '1';
+    }
+    s(obj).visibility = 'visible';
+    s(obj).opacity = opacity;
+} // fadeIn
+
+fadeOut = function (object, timeout) {
+    s(object).opacity = '0';
+    setTimeout(function () {
+        s(object).visibility = 'hidden';
+    }, timeout)
+} // fadeOut
+
 modHeader = function (i) {
     switch (i) {
         case 'show':
@@ -6,6 +24,7 @@ modHeader = function (i) {
             s('main-header').height = '100%';
             s('main-header').backgroundColor = '#362600';
             s('main-header').backgroundSize = '70px';
+            s('main-header').backgroundPosition = 'left 10px';
 
             if (window.cordova && StatusBar) {
                 StatusBar.backgroundColorByHexString('#362600');
@@ -17,28 +36,46 @@ modHeader = function (i) {
 
             s('main-header').backgroundColor = '#b27c00';
             s('main-header').backgroundSize = '100px';
+            s('main-header').backgroundPosition = 'right 10px';
 
             if (window.cordova && StatusBar) {
                 StatusBar.backgroundColorByHexString('#b27c00');
             }
             break;
     }
-}
+} // modHeader
+
+modSubheader = function (i) {
+    switch (i) {
+        case 'show':
+            s('main-subheader').height = '50px';
+            break;
+        case 'hide':
+            s('main-subheader').height = '0px';
+            break;
+    }
+} // modSubheader
 
 modNavigation = function (i) {
     switch (i) {
         case 'show':
-            log('Navigation open');
-            s('navigation').width = '200px';
-            s('main-container').left = '200px';
+            // log('Navigation open');
+            s('navigation').width = param_navigation_width;
+            s('main-container').left = '100px';
+            fadeIn('main-blocker', param_mainBlocker_opacity);
+            o('main-blocker').addEventListener('click', function () {
+                modNavigation('hide')
+            })
             break;
         case 'hide':
-            log('Navigation closed');
+            // log('Navigation closed');
             s('navigation').width = '0px';
             s('main-container').left = '0px';
+            fadeOut('main-blocker', 300)
+            o('main-blocker').removeEventListener('click', false);
             break;
     }
-}
+} // modNavigation
 
 onConfirm = function (buttonIndex) {
     switch (buttonIndex) {
@@ -49,50 +86,27 @@ onConfirm = function (buttonIndex) {
             alert('2');
             break;
     }
-}
+} // onConfirm
 
 pageStatic = function () {
-    subHeader('show');
-}
+    // subHeader('show');
+    page.go(1);
+} // pageStatic
 
 pageLog = function () {
-    subHeader('hide');
-}
+    // subHeader('hide');
+    page.go(2);
+} // pageLog
 
 pagePlaces = function () {
     testNotif();
-    var props = {
-        seconds: 10,
-        fps: 30
-    };
+} // pagePlaces
 
-    heartbeat.take(props, successCallback, errorCallback);
-}
-
-pageSelector = function () {
+hashListener = function () {
     (location.hash === "#static") && pageStatic();
     (location.hash === "#log") && pageLog();
     (location.hash === "#places") && pagePlaces();
-}
-
-function successCallback(bpm) {
-    alert("Your heart beat per minute is:" + bpm);
-}
-
-function errorCallback() {
-    alert("Has not posible measure your heart beat");
-}
-
-subHeader = function (i) {
-    switch (i) {
-        case 'show':
-            s('main-subheader').height = '50px';
-            break;
-        case 'hide':
-            s('main-subheader').height = '0px';
-            break;
-    }
-}
+} // hashListener
 
 swiper = function (state) {
     switch (state) {
@@ -109,7 +123,7 @@ swiper = function (state) {
             modHeader('hide');
             break;
     }
-}
+} // swiper extend
 
 testNotif = function () {
     var now = new Date().getTime(),
@@ -133,20 +147,42 @@ testNotif = function () {
         log('Simulating notification ...')
     }
 
-};
+}; // test notification
 
 init = function () {
+    window.addEventListener("hashchange", hashListener);
+    document.addEventListener('touchstart', handleTouchStart, false);
+    document.addEventListener('touchmove', handleTouchMove, false);
+    document.addEventListener('touchend', handleTouchEnd, false);
+    document.addEventListener('oncontextmenu', function(){return false;});
+    
+    // enabling fastclick
+    document.addEventListener('DOMContentLoaded', function () {
+        FastClick.attach(document.body);
+    }, false);
+    
+    
     log('Initialized');
+    
+    minimo = null;
+    
+    load({
+        url: 'config.json',
+        loaded: function (res) {
+            var minimo = JSON.parse(res);
+
+            log("app : " + minimo['app_name']);
+            log("version : " + minimo['version']);
+        }
+    }); // load
 
     s('main-header').height = '70px';
     s('main-subheader').height = '50px';
 
-    pageSelector();
+    page = new Page('main-page');
 
-    var slider1 = new Slider('#slider1', '.z-slide-item', {
-        interval: 12,
-        duration: 0.3
-    });
+    hashListener(); // select page from hash
+
 
     document.addEventListener('deviceready', function () {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,28 +194,23 @@ init = function () {
         cordova.plugins.notification.local.on("click", function (notification) {
 
             var user = JSON.parse(notification.data);
+
             navigator.notification.confirm(
                 'Hello ' + user['username'] + ', Category selected ' + notification.id, // message
                 onConfirm, // callback to invoke with index of button pressed
                 'Saving data', // title
-                    ['Ok', 'Cancel'] // buttonLabels
+                ['Ok', 'Cancel'] // buttonLabels
             );
         });
 
         // monitor hash
 
-
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     });
-}
-
-
+} // initialize application
 
 
 // EVENT LISTENER
-window.addEventListener("hashchange", pageSelector);
+
 window.addEventListener("load", init);
-document.addEventListener('touchstart', handleTouchStart, false);
-document.addEventListener('touchmove', handleTouchMove, false);
-document.addEventListener('touchend', handleTouchEnd, false);
+
