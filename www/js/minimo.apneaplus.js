@@ -11,8 +11,6 @@ hashListener = function () {
 modHeader = function (i) {
     switch (i) {
         case 'show':
-            log('Navigation open');
-
             s('main-header').height = '100%';
             s('main-header').backgroundColor = '#362600';
             s('main-header').backgroundSize = '70px';
@@ -23,7 +21,6 @@ modHeader = function (i) {
             }
             break;
         case 'hide':
-            log('Navigation closed');
             s('main-header').height = '70px';
 
             s('main-header').backgroundColor = '#b27c00';
@@ -72,10 +69,11 @@ modNavigation = function (i) {
 onConfirm = function (buttonIndex) {
     switch (buttonIndex) {
         case 1:
-            alert('1');
+            
             break;
         case 2:
             alert('2');
+            window.location = "#static/o2";
             break;
     }
 } // onConfirm
@@ -172,12 +170,17 @@ INIT = function () {
     setInterval(function () {
         load({
             url: minimo.API + 'minimo_notification.php?user_id=1',
-            loaded: function (res) {
-                var msg = JSON.parse(res);
-                for(var i = 0; i < msg.length; i++){
-                    Notification(msg[i].id,minimo.appName, msg[i].message,'{}')
+                loaded: function (res) {
+                    if (res == "0") {
+                        // no notification
+                    } else {
+                        var msg = JSON.parse(res);
+                        for (var i = 0; i < msg.length; i++) {
+                            Notification(msg[i].id, minimo.appName, msg[i].message, '{}')
+                        }
+                    }
+
                 }
-            }
         }); // load
     }, 30000);
 
@@ -193,9 +196,9 @@ INIT = function () {
             var user = JSON.parse(notification.data);
 
             navigator.notification.confirm(
-                'Hello ' + user['username'] + ', Category selected ' + notification.id, // message
+                user.text, // message
                 onConfirm, // callback to invoke with index of button pressed
-                'Saving data', // title
+                user.title, // title
                 ['Ok', 'Cancel'] // buttonLabels
             );
         });
