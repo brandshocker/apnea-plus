@@ -6,13 +6,17 @@ body {
     background: #D49300;
     font-size: 11px;
     font-family: 'Open Sans', sans-serif;
+    
+    -webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
 }
 
 a {
-    color: #312200;
-}
-
-a:visited {
     color: #312200;
 }
 
@@ -76,7 +80,7 @@ a:active {
     text-align: center;
 }
 
-#main-subheader a:hover {
+#main-subheader a:active {
     background: #885f02;
 }
 
@@ -87,7 +91,7 @@ a:active {
     background-image: url('res/preloader-clock.gif');
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 25px 25px;
+    background-size: 50px 50px;
     overflow-y: hidden;
     flex: 1;
 }
@@ -130,3 +134,29 @@ a:active {
     transition: 0.2s;
 }
 
+#page1 a {
+    width: calc(100% - 20px;);
+    height: 50px;
+    display: block;
+    text-align: center;
+    padding-top: 25px;
+    margin: 10px 10px 0px 10px;
+    color: #221802;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 20px;
+    text-decoration: none;
+    border: none;
+    border-bottom: 1px solid #a7760b;
+    transition: 0.05s;
+}
+
+#page1 a:active{
+    background: #a07105;
+}
+
+@media (max-width: 600px) {
+    ::-webkit-scrollbar {
+    width: 0px;
+    visibility:hidden;
+    }
+ }

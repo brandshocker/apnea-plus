@@ -1,5 +1,6 @@
 {
-    "app_name": "Apnea+",
+    "appName": "Apnea+",
     "version": "1.1.0",
-	"log": true
+    "API":"https://dsfcalculation.000webhostapp.com/api/",
+	"debug": true
 }
