@@ -1,20 +1,11 @@
 param_mainBlocker_opacity = '0.6';
 param_navigation_width = '200px';
 
-fadeIn = function (obj, opacity) {
-    if (opacity == undefined) {
-        opacity = '1';
-    }
-    s(obj).visibility = 'visible';
-    s(obj).opacity = opacity;
-} // fadeIn
-
-fadeOut = function (object, timeout) {
-    s(object).opacity = '0';
-    setTimeout(function () {
-        s(object).visibility = 'hidden';
-    }, timeout)
-} // fadeOut
+hashListener = function () {
+    (location.hash === "#static") && pageStatic();
+    (location.hash === "#log") && pageLog();
+    (location.hash === "#places") && pagePlaces();
+} // hashListener
 
 modHeader = function (i) {
     switch (i) {
@@ -102,12 +93,6 @@ pagePlaces = function () {
     testNotif();
 } // pagePlaces
 
-hashListener = function () {
-    (location.hash === "#static") && pageStatic();
-    (location.hash === "#log") && pageLog();
-    (location.hash === "#places") && pagePlaces();
-} // hashListener
-
 swiper = function (state) {
     switch (state) {
         case 'left':
@@ -125,23 +110,29 @@ swiper = function (state) {
     }
 } // swiper extend
 
-testNotif = function () {
+Storage.prototype.setObject = function (key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function (key) {
+    return JSON.parse(this.getItem(key));
+}
+
+Notification = function (id,title,text,data) {
     var now = new Date().getTime(),
-        _5_sec_from_now = new Date(now + 5 * 1000);
+        now = new Date(now);
 
     var sound = "file://notification.mp3";
 
     if (window.cordova) {
         cordova.plugins.notification.local.schedule({
-            id: 1,
+            id: id,
             title: 'Apnea+',
-            text: 'Dont forget to train today ...',
-            at: _5_sec_from_now,
+            text: text,
+            at: now,
             sound: sound,
             badge: 1,
-            data: {
-                "username": "Novan"
-            }
+            data: data
         })
     } else {
         log('Simulating notification ...')
@@ -149,32 +140,20 @@ testNotif = function () {
 
 }; // test notification
 
-init = function () {
+INIT = function () {
+    log('Initialized');
+    log("app : " + minimo.appName);
+    log("version : " + minimo.version);
+
     window.addEventListener("hashchange", hashListener);
     document.addEventListener('touchstart', handleTouchStart, false);
     document.addEventListener('touchmove', handleTouchMove, false);
     document.addEventListener('touchend', handleTouchEnd, false);
-    document.addEventListener('oncontextmenu', function(){return false;});
-    
+
     // enabling fastclick
     document.addEventListener('DOMContentLoaded', function () {
         FastClick.attach(document.body);
     }, false);
-    
-    
-    log('Initialized');
-    
-    minimo = null;
-    
-    load({
-        url: 'config.json',
-        loaded: function (res) {
-            var minimo = JSON.parse(res);
-
-            log("app : " + minimo['app_name']);
-            log("version : " + minimo['version']);
-        }
-    }); // load
 
     s('main-header').height = '70px';
     s('main-subheader').height = '50px';
@@ -183,6 +162,17 @@ init = function () {
 
     hashListener(); // select page from hash
 
+    setInterval(function () {
+        load({
+            url: minimo.API + 'minimo_notification.php?user_id=1',
+            loaded: function (res) {
+                var msg = JSON.parse(res);
+                for(var i = 0; i < msg.length; i++){
+                    Notification(msg[i].id,minimo.appName, msg[i].message,'{}')
+                }
+            }
+        }); // load
+    }, 30000);
 
     document.addEventListener('deviceready', function () {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,14 +193,20 @@ init = function () {
             );
         });
 
-        // monitor hash
+        // Check Notification
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     });
+
 } // initialize application
 
 
 // EVENT LISTENER
 
-window.addEventListener("load", init);
-
+load({
+    url: 'config.json',
+    loaded: function (res) {
+        minimo = JSON.parse(res);
+        window.addEventListener("load", INIT);
+    }
+}); // load

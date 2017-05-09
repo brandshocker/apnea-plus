@@ -1,7 +1,14 @@
 // MINIMO CORE 1.1
+mimo = {
+    version : '1.0.0',
+    debug : true,
+    developer : 'Minimo Labs'
+}
 
 log = function (i) {
-    console.log(i);
+    if(mimo.debug){
+        console.log(i);
+    }
 }
 
 o = function (id) {
@@ -16,6 +23,55 @@ s = function (id) {
     return o(id).style;
 }
 
+fadeIn = function (obj, opacity) {
+    if (opacity == undefined) {
+        opacity = '1';
+    }
+    s(obj).visibility = 'visible';
+    s(obj).opacity = opacity;
+} // fadeIn
+
+fadeOut = function (object, timeout) {
+    s(object).opacity = '0';
+    setTimeout(function () {
+        s(object).visibility = 'hidden';
+    }, timeout)
+} // fadeOut
+
+Get = function(v) {
+    return localStorage.getItem(v);
+}; // function Get 
+
+load = function (obj) {
+    var url = obj['url'];
+    var loaded = obj['loaded'];
+    var data = obj['data'];
+    var type = obj['type'];
+
+    if (data == undefined) {
+        data = "";
+    } else {
+        data = "?" + data;
+    }
+
+    if (type == undefined) {
+        type = 'GET';
+    }
+
+    var xObj = new XMLHttpRequest();
+    xObj.open(type, url + data, true);
+    xObj.onreadystatechange = function () {
+        if (xObj.readyState == 4 && xObj.status == 200) {
+            loaded(xObj.responseText);
+        } else {
+            var error = obj['error'];
+            if (typeof error === 'function') {
+                error();
+            }
+        }
+    };
+    xObj.send(null);
+}; // function load
 
 Page = function (ID) {
     this.PAGE = 1;
@@ -78,9 +134,6 @@ Page = function (ID) {
         this.initY = e.touches[0].clientY;
         s(page.ID).transition = '0s';
         this.state = null;
-        // this.initOx = s(this.ID).left;
-        // this.initOx = initOx.substring(0, initOx.length - 2);
-        // log(this.initOx);
     }
 
     touchMove = function (e) {
@@ -94,10 +147,7 @@ Page = function (ID) {
             } else {
                 this.state = 'ver';
             }
-            
-            log(this.state);
         }
-        
         
         if (this.initX < 20) {
             return;
@@ -121,17 +171,13 @@ Page = function (ID) {
             if(this.state == 'hor'){
                 e.preventDefault();
                 s(ID).transform = "translate3d(" + this.to + "%,0,0)";
-            } 
-
-            
+            }         
         }
-
     }
     
     touchEnd = function (e) {
         if (this.state == 'hor') {
             if (this.initX > 30) {
-                s(page.ID).transition = '0.2s';
                 if (this.diff >= -70 && this.diff <= 70) {
                     page.go(page.PAGE);
                 } else {
@@ -142,10 +188,13 @@ Page = function (ID) {
                     }
                 }
             }
-
         }
+        
+        s(page.ID).transition = '0.2s';
 
         this.state = null;
+        this.diff = null;
+        this.yDiff = null;
     }
 
     o(ID).addEventListener("touchstart", function (event) {
@@ -159,40 +208,18 @@ Page = function (ID) {
     o(ID).addEventListener("touchend", function () {
         touchEnd();
     });
+    
+    o(ID).addEventListener("touchcancel", function () {
+        touchEnd();
+    });
 
 } // page constructors
 
-load = function (obj) {
-    var url = obj['url'];
-    var loaded = obj['loaded'];
-    var data = obj['data'];
-    var type = obj['type'];
+Set = function(v, al) {
+    localStorage.setItem(v, al);
+}; // function set 
 
-    if (data == undefined) {
-        data = "";
-    } else {
-        data = "?" + data;
-    }
 
-    if (type == undefined) {
-        type = 'GET';
-    }
-
-    var xObj = new XMLHttpRequest();
-    xObj.open(type, url + data, true);
-    xObj.onreadystatechange = function () {
-        if (xObj.readyState == 4 && xObj.status == 200) {
-            loaded(xObj.responseText);
-        } else {
-            var error = obj['error'];
-            if (typeof error === 'function') {
-                error();
-            }
-        }
-    };
-    xObj.send(null);
-
-}; // function load
 
 // SWIPER NEED_CLEEN
 
