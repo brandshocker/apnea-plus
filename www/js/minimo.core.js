@@ -126,6 +126,18 @@ Page = function (ID) {
         }
         
         this.PAGE = page;
+
+        switch (this.PAGE) {
+            case 1:
+                window.location = "#static";
+                break;
+            case 2:
+                window.location = "#log";
+                break;
+            case 3:
+                window.location = "#places";
+                break;
+        }
     }
 
     touchStart = function(e) {

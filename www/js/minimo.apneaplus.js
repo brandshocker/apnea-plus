@@ -3,6 +3,7 @@ param_navigation_width = '200px';
 
 hashListener = function () {
     (location.hash === "#static") && pageStatic();
+    (location.hash === "#static/o2") && modHeader('show');
     (location.hash === "#log") && pageLog();
     (location.hash === "#places") && pagePlaces();
 } // hashListener
@@ -82,15 +83,21 @@ onConfirm = function (buttonIndex) {
 pageStatic = function () {
     // subHeader('show');
     page.go(1);
+    s('header-marker').marginLeft = "0px";
+    modHeader('hide');
 } // pageStatic
 
 pageLog = function () {
     // subHeader('hide');
     page.go(2);
+    s('header-marker').marginLeft = "calc((100% / 3) * 1)";
+    modHeader('hide');
 } // pageLog
 
 pagePlaces = function () {
-    testNotif();
+    page.go(3);
+     s('header-marker').marginLeft = "calc((100% / 3) * 2)";
+    modHeader('hide');
 } // pagePlaces
 
 swiper = function (state) {

@@ -24,6 +24,15 @@ a:active {
     color: #312200;
 }
 
+#header-marker {
+    width : calc(100% / 3);
+    height: 6px;
+    background: #ffd87d;
+    position: absolute;
+    margin-top: 45px;
+    transition: 0.4s;
+}
+
 #main-container {
     position: fixed;
     width: 100%;
@@ -55,7 +64,7 @@ a:active {
     background-repeat: no-repeat;
     background-position: right 10px;
     background-size: 100px;
-    transition: 0.3s;
+    transition: 0.2s ease-in-out;
 }
 
 #main-subheader {
@@ -88,7 +97,7 @@ a:active {
     width: 100%;
     height: 100%;
     background-color: #D49300;
-    background-image: url('res/preloader-clock.gif');
+    /*background-image: url('res/preloader-clock.gif');*/
     background-repeat: no-repeat;
     background-position: center center;
     background-size: 50px 50px;
